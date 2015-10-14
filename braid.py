@@ -63,7 +63,6 @@ class Braid(object):
         The nullstring is 'e' for the Artin representation and '#' for alpha.
         """
         if target == 'artin':
-
             return ' '.join('s_{' + str(abs(g)) + '}^{' + str(abs(g)/g) + '}'\
                             if g != 0 else 'e' for g in self.generators)
         elif target == 'alpha':
