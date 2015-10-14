@@ -9,12 +9,11 @@ class Braid(object):
     
     def __init__(self, generators, pref_notation='default'):
         """
-        A 'null string' should be input as [0]
+        A 'null string' should be input as []
 
         pref_notation: preferred notation for output as a string
         """
         assert type(generators) == type([]), "Braid should be input as a list"
-        assert len(generators) > 0, "No braid generators given"
         self.generators = generators
         self.pref_notation = pref_notation
 
@@ -63,14 +62,18 @@ class Braid(object):
         The nullstring is 'e' for the Artin representation and '#' for alpha.
         """
         if target == 'artin':
+            if len(self.generators) == 0:
+                return 'e'
             return ' '.join('s_{' + str(abs(g)) + '}^{' + str(abs(g)/g) + '}'\
                             if g != 0 else 'e' for g in self.generators)
         elif target == 'alpha':
+            if len(self.generators) == 0:
+                return '#'
             m = self.main_generator()
             alp = lambda g: chr(ord('Q') + (abs(g) / g) * 16 + abs(g) - 1)
             return ''.join(alp(g) if g != 0 else '#' for g in self.generators)
         else:
-            return ':'.join(str(g) for g in self.generators)
+            return '<' + ' : '.join(str(g) for g in self.generators) + '>'
 
     def __str__(self):
         return self.change_notation(self.pref_notation)
