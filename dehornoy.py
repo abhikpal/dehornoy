@@ -17,12 +17,17 @@ def get_first_handle(braid):
         if braid.generators[p] + braid.generators[q] == 0:
             v = braid.generators[(p+1):q]
             j = abs(braid.generators[p])
-            if (j-1) in v or -1*(j-1) in v:
-                return False
-            elif (j in v) or (-1*j in v):
-                return False
+            for k in v:
+                if not (abs(k) < (j - 1) or abs(k) > j):
+                    return False
             else:
                 return True
+            # if (j-1) in v or -1*(j-1) in v:
+            #     return False
+            # elif (j in v) or (-1*j in v):
+            #     return False
+            # else:
+            #     return True
         else:
             return False
     p, q = 0, 0
@@ -58,14 +63,20 @@ def reduce(braid, (p, q)):
 
 a = Braid([2, -1, -2, -1, 2, 1], 'alpha')
 b = Braid([-1, -2, 1, 3, -2, -3, -2, 1, -3, 2, 1, 1], 'alpha')
-brd = b
+c = Braid([-1, -2, -2, -1, -1, -1, -1, -1, -1, 2, 2, 2, 2, 2, 2, 2, 2, 3, 2, 1, -1, 3, 3, -2, -3, 1, -2, -2, -2, -2, -2, -2, 1, 1, 1, 1, 1, 1, -2, -2], 'alpha')
+d = Braid([1, 3, -2, 4, 2, -3, -1], 'alpha')
+e = Braid([2, 2, -1, -1, -1, -1, -1, -1, 1, 1, 1, 1, 1, 1, -2, -2], 'alpha')
+brd = c
 while True:
-    print 'Braid: ', str(brd),
+    # print str(brd),
     first_handle = get_first_handle(brd)
-    print '\tHandle: ' + str(first_handle)
-    print ' '
+    # print '\tHandle: ' + str(first_handle)
+    bRep = str(brd)
     if first_handle == None:
+        print bRep
         break
+    p, q = first_handle
+    print bRep[:p] + '[' + bRep[p:q+1] + ']' + bRep[q+1:]  
     brd = reduce(brd, first_handle)
 print 'Reduced!'
 
