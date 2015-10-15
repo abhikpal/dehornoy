@@ -60,28 +60,50 @@ def reduce(braid, (p, q)):
                         braid.generators[q + 1:]
     return Braid(new_generators, braid.pref_notation)
 
+def fully_reduce(braid, print_output=True):
+    """
+    Ffully reduces the given braid.
+    """
+    chain = []
+    reduced_brd = braid
+    while True:
+        handle = get_first_handle(reduced_brd)
+        chain.append((reduced_brd, handle))
+        if handle == None:
+            if print_output:
+                print str(reduced_brd)
+            break
+        p, q = handle
+        if print_output:
+            if reduced_brd.pref_notation == 'alpha':
+                print str(reduced_brd)[:p] + '[' + \
+                      str(reduced_brd)[p:q+1] + ']' \
+                    + str(reduced_brd)[q+1:]
+            else:
+                print str(reduced_brd)
+        reduced_brd = reduce(reduced_brd, handle)
+    return (reduced_brd, chain)
 
-a = Braid([2, -1, -2, -1, 2, 1], 'alpha')
-b = Braid([-1, -2, 1, 3, -2, -3, -2, 1, -3, 2, 1, 1], 'alpha')
-c = Braid([-1, -2, -2, -1, -1, -1, -1, -1, -1, 2, 2, 2, 2, 2, 2, 2, 2, 3, 2, 1, -1, 3, 3, -2, -3, 1, -2, -2, -2, -2, -2, -2, 1, 1, 1, 1, 1, 1, -2, -2], 'alpha')
-d = Braid([1, 3, -2, 4, 2, -3, -1], 'alpha')
-e = Braid([2, 2, -1, -1, -1, -1, -1, -1, 1, 1, 1, 1, 1, 1, -2, -2], 'alpha')
-brd = c
-while True:
-    # print str(brd),
-    first_handle = get_first_handle(brd)
-    # print '\tHandle: ' + str(first_handle)
-    bRep = str(brd)
-    if first_handle == None:
-        print bRep
-        break
-    p, q = first_handle
-    print bRep[:p] + '[' + bRep[p:q+1] + ']' + bRep[q+1:]  
-    brd = reduce(brd, first_handle)
-print 'Reduced!'
+def compare(b1, b2, print_output=True):
+    """
+    Compares two braids b1 and b2. Returns true if equal.
+    """
+    if print_output:
+        print 'b1: ', str(b1)
+        print 'b2: ', str(b2)
+        print 'b1*inv(b2): ', str(b1*b2.inverse())
+        print 'Reducing b1 * inv(b2)...'
+        print 
+    reduced, chain = fully_reduce(b1*b2.inverse(), print_output)
+    if reduced.generators == []:
+        if print_output:
+            print 'b1 == b2 :)'
+            return True
+    else:
+        if print_output:
+            print 'b1 != b2'
+        return False
 
-# handle = get_first_handle(a)
-# print 'a: ' + str(a)
-# print 'first_handle: ' + str(handle)
-# b = reduce(a, handle)
-# print 'reduced: ' + str(b)
+a = Braid([2, 2, -1, -2, 3,  2, -1, -2, -3, 2, 3, 2, 2, -1, -2, -3], 'artin')
+b = Braid([-1, -2, 1, 3, -2, -3, -2, 1, -3, 2, 1, 1], 'artin')
+compare(a, b, True)

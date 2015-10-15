@@ -47,10 +47,11 @@ class Braid(object):
         """
         Returns the inverse of the braid.
         """
-        return Braid([-1*k for k in  reversed(self.generators)])
+        return Braid([-1*k for k in  reversed(self.generators)],
+                self.pref_notation)
 
     def __mul__(self, other):
-        return Braid(self.generators + other.generators)
+        return Braid(self.generators + other.generators, self.pref_notation)
 
     def change_notation(self, target):
         """
