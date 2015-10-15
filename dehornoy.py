@@ -1,27 +1,37 @@
 from braid import Braid
 
-def get_first_handle(some_braid):
+def get_first_handle(braid):
     """
     Finds and returns the first handle of the given braid.
 
     return:
         (p, q) : Where p, q are the start and end points of the handle.
     """
+    def is_handle(braid, (p, q)):
+        """
+        Checks if (p, q) is a valid handle in the given braid.
 
-    gens = some_braid.generators
-    # print 'p\tq\tk\ttemp_p'
+        return:
+            True/False
+        """
+        if braid.generators[p] + braid.generators[q] == 0:
+            v = braid.generators[(p+1):q]
+            j = abs(braid.generators[p])
+            if (j-1) in v or -1*(j-1) in v:
+                return False
+            elif (j in v) or (-1*j in v):
+                return False
+            else:
+                return True
+        else:
+            return False
     p, q = 0, 0
-    for pos in xrange(len(gens)):
-        q = pos
-        temp_p = p
-        for k in xrange(temp_p, q):
-            # print str(p) + '\t' + str(q) + '\t' + str(k) + '\t' + str(temp_p)
-            if (gens[k] + gens[q]) == 0:
+    for q in xrange(len(braid.generators)):
+        for k in xrange(q, (p-1), -1):
+            if is_handle(braid, (k, q)):
                 return (k, q)
-            elif (abs(gens[k]) - abs(gens[q])) == 1 or \
-                 (abs(gens[q]) - abs(gens[k])) == 0:
-                    p += 1
-    return None
+    else:
+        return None
 
 def reduce(braid, (p, q)):
     """
