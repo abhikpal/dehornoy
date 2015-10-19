@@ -7,14 +7,20 @@ class Braid(object):
     Describes a braid word and some basic operations on it.
     """
     
-    def __init__(self, generators, pref_notation='default'):
+    def __init__(self, generators, pref_notation='alpha'):
         """
         A 'null string' should be input as []
 
         pref_notation: preferred notation for output as a string
         """
-        assert type(generators) == type([]), "Braid should be input as a list"
-        self.generators = generators
+        if type(generators) == type([]):
+            self.generators = generators
+        elif (type(generators) == type('str')) and (generators.isalpha()):
+            self.generators = [-1 * (ord(l) - ord('A') + 1) if l.isupper()
+                               else (ord(l) - ord('a') + 1)
+                               for l in generators]
+        else:
+            raise TypeError, "Check input: Expecting list or alphabetical str"
         self.pref_notation = pref_notation
 
     def main_generator(self):

@@ -104,6 +104,6 @@ def compare(b1, b2, print_output=True):
             print 'b1 != b2'
         return False
 
-a = Braid([2, 2, -1, -2, 3,  2, -1, -2, -3, 2, 3, 2, 2, -1, -2, -3], 'artin')
-b = Braid([-1, -2, 1, 3, -2, -3, -2, 1, -3, 2, 1, 1], 'artin')
-compare(a, b, True)
+# a = Braid([2, 2, -1, -2, 3,  2, -1, -2, -3, 2, 3, 2, 2, -1, -2, -3], 'artin')
+# b = Braid([-1, -2, 1, 3, -2, -3, -2, 1, -3, 2, 1, 1], 'artin')
+# compare(a, b, True)
